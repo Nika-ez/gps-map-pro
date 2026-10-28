@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:id="@+id/mapDim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:id="@+id/mapControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/search_place"
+            android:src="@drawable/ic_search"
+            app:backgroundTint="?attr/appFabColor"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="mini"
+            app:rippleColor="#33FFFFFF"
+            app:tint="?attr/appFabIconColor" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnLayers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/map_layers"
+            android:src="@drawable/ic_layers"
+            app:backgroundTint="?attr/appFabColor"
+            app:borderWidth="0dp"
+            app:elevation="4dp"
+            app:fabSize="mini"
+            app:rippleColor="#33FFFFFF"
+            app:tint="?attr/appFabIconColor" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCameraMode"
+            style="@style/Widget.GpsMap.ModeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/camera_mode"
+            android:text="@string/north_up"
+            android:textColor="?attr/appFabIconColor"
+            app:backgroundTint="?attr/appFabColor"
+            app:icon="@drawable/ic_compass"
+            app:iconTint="?attr/appFabIconColor" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnFollow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/follow_location"
+            android:src="@drawable/ic_my_location"
+            app:backgroundTint="?attr/colorPrimary"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:rippleColor="#33FFFFFF"
+            app:tint="#FFFFFFFF" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/recordingPill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="52dp"
+        android:background="@drawable/bg_recording_pill"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="12dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/attribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.9"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:text="@string/attribution"
+        android:textColor="?attr/hudSubtleColor"
+        android:textSize="9sp" />
+
+    <com.nika.gpsmap.ui.HudPanelView
+        android:id="@+id/hudPanel"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top" />
+</FrameLayout>

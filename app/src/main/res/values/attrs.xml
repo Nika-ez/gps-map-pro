@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="hudPanelColor" format="color" />
+    <attr name="hudTextColor" format="color" />
+    <attr name="hudSubtleColor" format="color" />
+    <attr name="hudAccentColor" format="color" />
+    <attr name="hudSatColor" format="color" />
+    <attr name="hudWarnColor" format="color" />
+    <attr name="hudDangerColor" format="color" />
+    <attr name="hudHandleColor" format="color" />
+    <attr name="hudExtraColor" format="color" />
+    <attr name="mapDimColor" format="color" />
+    <attr name="appStatusBarColor" format="color" />
+    <attr name="appFabColor" format="color" />
+    <attr name="appFabIconColor" format="color" />
+    <attr name="appAccentInk" format="color" />
+</resources>

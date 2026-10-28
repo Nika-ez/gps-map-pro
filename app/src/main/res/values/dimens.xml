@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="hud_expanded_height">320dp</dimen>
+    <dimen name="hud_mini_height">104dp</dimen>
+    <dimen name="hud_padding">20dp</dimen>
+    <dimen name="screen_margin">20dp</dimen>
+    <dimen name="sheet_padding">24dp</dimen>
+    <dimen name="sheet_corner">28dp</dimen>
+</resources>
