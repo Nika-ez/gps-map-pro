@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity() {
         map.controller.setCenter(GeoPoint(48.2082, 16.3738))
 
         pinOverlay = PinOverlay().apply { setPalette(palette.accent) }
-        markerOverlay = LocationMarkerOverlay()
+        markerOverlay = LocationMarkerOverlay().apply { setStyle(prefs.markerStyle) }
         map.overlays.add(pinOverlay)
         map.overlays.add(markerOverlay)
         map.overlays.add(
@@ -738,6 +738,11 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onThemeSelected(mode: ThemeMode) {
                     applyTheme(mode)
+                }
+
+                override fun onMarkerStyleChanged(style: MarkerStyle) {
+                    markerOverlay.setStyle(style)
+                    map.invalidate()
                 }
 
                 override fun onCameraHeadingChanged(enabled: Boolean) {

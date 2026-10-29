@@ -1,6 +1,7 @@
 package com.nika.gpsmap.map
 
 import android.content.Context
+import com.nika.gpsmap.BuildConfig
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.modules.SqlTileWriter
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -46,7 +47,7 @@ object MapStyles {
         val config = Configuration.getInstance()
         @Suppress("DEPRECATION")
         config.load(context, android.preference.PreferenceManager.getDefaultSharedPreferences(context))
-        config.userAgentValue = "${context.packageName}/2.0 (Android)"
+        config.userAgentValue = "${context.packageName}/${BuildConfig.VERSION_NAME} (Android)"
         config.tileFileSystemCacheMaxBytes = 80L * 1024L * 1024L
         config.tileFileSystemCacheTrimBytes = 64L * 1024L * 1024L
     }

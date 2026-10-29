@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.nika.gpsmap.BuildConfig
 import com.nika.gpsmap.Fmt
+import com.nika.gpsmap.MarkerStyle
 import com.nika.gpsmap.Prefs
 import com.nika.gpsmap.R
 import com.nika.gpsmap.ThemeMode
@@ -29,6 +30,7 @@ class SettingsSheet(
     interface Callbacks {
         fun onAutoCollapseChanged(enabled: Boolean)
         fun onThemeSelected(mode: ThemeMode)
+        fun onMarkerStyleChanged(style: MarkerStyle)
         fun onCameraHeadingChanged(enabled: Boolean)
         fun onExtraStatsChanged(enabled: Boolean)
         fun onUnitsChanged(units: UnitSystem)
@@ -84,6 +86,32 @@ class SettingsSheet(
                 if (mode == prefs.theme) return
                 callbacks.onThemeSelected(mode)
                 sheet.dismiss()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
+        val spinnerMarker = root.findViewById<Spinner>(R.id.spinnerMarker)
+        val markerStyles = MarkerStyle.entries
+        val markerAdapter = ArrayAdapter(
+            context,
+            R.layout.item_spinner,
+            markerStyles.map { context.getString(it.labelRes) }
+        )
+        markerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        spinnerMarker.adapter = markerAdapter
+        spinnerMarker.setSelection(prefs.markerStyle.ordinal, false)
+        var markerInitial = true
+        spinnerMarker.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (markerInitial) {
+                    markerInitial = false
+                    return
+                }
+                val style = markerStyles.getOrNull(position) ?: return
+                if (style == prefs.markerStyle) return
+                prefs.markerStyle = style
+                callbacks.onMarkerStyleChanged(style)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit

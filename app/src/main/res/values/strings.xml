@@ -26,6 +26,12 @@
     <string name="theme_original">Original</string>
     <string name="theme_night">Night</string>
     <string name="theme_light">Light</string>
+    <string name="marker_style">Location marker</string>
+    <string name="marker_style_desc">How your position appears on the map</string>
+    <string name="marker_dot">Dot</string>
+    <string name="marker_arrow">Arrow</string>
+    <string name="marker_car">Car</string>
+    <string name="marker_pin">Pin</string>
     <string name="camera_heading">Heading-up camera</string>
     <string name="camera_heading_desc">Rotate the map with the device compass while following</string>
     <string name="show_extra">Show extra stats</string>

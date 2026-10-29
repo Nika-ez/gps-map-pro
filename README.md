@@ -11,6 +11,7 @@ A fast, offline-friendly GPS dashboard for Android. GPS Map Pro keeps the clean 
 - Live OpenStreetMap with automatic tile caching and an offline-only mode.
 - North-up and heading-up camera modes while following your position.
 - Themes: **Original**, **Night**, and **Light** (saved on the device).
+- Location marker styles: **Dot**, **Arrow**, **Car**, and **Pin**, selected in Settings.
 - Auto-collapse toggle as the first setting in the dashboard settings popup.
 - Track recording to GPX, track list, playback, GPX sharing and deletion.
 - Place search via Nominatim, long-press pins with reverse-geocoded addresses.
@@ -19,7 +20,7 @@ A fast, offline-friendly GPS dashboard for Android. GPS Map Pro keeps the clean 
 
 ## Install
 
-Download `GPS-Map-Pro-2.0.apk` from the latest GitHub release and open it on an Android 8.0+ phone. Allow installation from the browser or file manager when prompted, then grant location permission on first launch.
+Download `GPS-Map-Pro-2.1.apk` from the latest GitHub release and open it on an Android 8.0+ phone. Allow installation from the browser or file manager when prompted, then grant location permission on first launch.
 
 The release APK is signed with a stable key, so future versions can be installed over it.
 

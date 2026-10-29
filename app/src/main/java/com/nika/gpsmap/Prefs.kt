@@ -29,6 +29,21 @@ enum class UnitSystem {
     }
 }
 
+enum class MarkerStyle(
+    val key: String,
+    @StringRes val labelRes: Int
+) {
+    DOT("dot", R.string.marker_dot),
+    ARROW("arrow", R.string.marker_arrow),
+    CAR("car", R.string.marker_car),
+    PIN("pin", R.string.marker_pin);
+
+    companion object {
+        fun fromKey(key: String?): MarkerStyle =
+            entries.firstOrNull { it.key == key } ?: DOT
+    }
+}
+
 class Prefs(context: Context) {
 
     private val sp = context.applicationContext.getSharedPreferences("gps_map_pro", Context.MODE_PRIVATE)
@@ -52,6 +67,10 @@ class Prefs(context: Context) {
     var showExtraStats: Boolean
         get() = sp.getBoolean("show_extra_stats", true)
         set(value) = sp.edit().putBoolean("show_extra_stats", value).apply()
+
+    var markerStyle: MarkerStyle
+        get() = MarkerStyle.fromKey(sp.getString("marker_style", MarkerStyle.DOT.key))
+        set(value) = sp.edit().putString("marker_style", value.key).apply()
 
     var coordDms: Boolean
         get() = sp.getBoolean("coord_dms", false)
