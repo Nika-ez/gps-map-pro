@@ -314,9 +314,9 @@
             android:id="@+id/tvSharedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="16dp"
             android:maxLines="1"
             android:text="--:--"
             android:textColor="#FFFFFF"
@@ -327,26 +327,26 @@
             android:id="@+id/tvSharedKmh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="16dp"
             android:maxLines="1"
             android:text="km/h: --"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvSharedBattery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tvSharedTime"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="2dp"
             android:maxLines="1"
             android:text="--%"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <FrameLayout
