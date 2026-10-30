@@ -17,7 +17,7 @@ data class PlaceResult(
 object NominatimClient {
 
     private const val BASE = "https://nominatim.openstreetmap.org"
-    private const val USER_AGENT = "GPSMapPro/2.0 (com.nika.gpsmap; Android)"
+    private const val USER_AGENT = "GPSMapPro/2.2 (com.nika.gpsmap; Android)"
 
     suspend fun search(query: String): List<PlaceResult> = withContext(Dispatchers.IO) {
         val encoded = URLEncoder.encode(query, "UTF-8")

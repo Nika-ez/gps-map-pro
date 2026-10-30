@@ -26,6 +26,9 @@ class TrackRecorder {
 
     fun add(location: Location, nowMillis: Long = System.currentTimeMillis()) {
         if (!isRecording) return
+        // Coarse network fixes and bad indoor GPS jumps are what made recorded
+        // tracks zig-zag. Only keep reasonably accurate points.
+        if (location.hasAccuracy() && location.accuracy > MAX_ACCURACY_METERS) return
         val candidate = TrackPoint(
             latitude = location.latitude,
             longitude = location.longitude,
@@ -47,6 +50,8 @@ class TrackRecorder {
             candidate.longitude,
             distance
         )
+        // Drop impossible teleports caused by a weaker fix.
+        if (dt > 0L && distance[0] / (dt / 1000.0) > MAX_PLAUSIBLE_SPEED_MPS) return
         if (dt >= 2000L || distance[0] >= 4f) {
             if (distance[0] < 500f || dt >= 10_000L) {
                 points.add(candidate)
@@ -61,4 +66,9 @@ class TrackRecorder {
 
     fun currentDurationMillis(now: Long = System.currentTimeMillis()): Long =
         if (!isRecording || startedAtMillis == 0L) 0L else (now - startedAtMillis).coerceAtLeast(0L)
+
+    private companion object {
+        const val MAX_ACCURACY_METERS = 40f
+        const val MAX_PLAUSIBLE_SPEED_MPS = 50f
+    }
 }

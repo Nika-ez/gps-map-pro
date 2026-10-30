@@ -1,4 +1,4 @@
-package com.nika.gpsmap.ui
+﻿package com.nika.gpsmap.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -108,7 +108,7 @@ class LayersSheet(
                 .show()
         }
 
-        sheet.show()
+        sheet.showExpanded()
     }
 
     fun dismiss() {

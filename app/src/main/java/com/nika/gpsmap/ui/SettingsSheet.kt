@@ -1,4 +1,4 @@
-package com.nika.gpsmap.ui
+﻿package com.nika.gpsmap.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,6 +15,7 @@ import com.google.android.material.materialswitch.MaterialSwitch
 import com.nika.gpsmap.BuildConfig
 import com.nika.gpsmap.Fmt
 import com.nika.gpsmap.MarkerStyle
+import com.nika.gpsmap.OrientationMode
 import com.nika.gpsmap.Prefs
 import com.nika.gpsmap.R
 import com.nika.gpsmap.ThemeMode
@@ -29,9 +30,10 @@ class SettingsSheet(
 
     interface Callbacks {
         fun onAutoCollapseChanged(enabled: Boolean)
+        fun onKeepVisibleChanged(enabled: Boolean)
+        fun onOrientationChanged(mode: OrientationMode)
         fun onThemeSelected(mode: ThemeMode)
         fun onMarkerStyleChanged(style: MarkerStyle)
-        fun onCameraHeadingChanged(enabled: Boolean)
         fun onExtraStatsChanged(enabled: Boolean)
         fun onUnitsChanged(units: UnitSystem)
         fun onCoordFormatChanged(dms: Boolean)
@@ -65,6 +67,13 @@ class SettingsSheet(
             callbacks.onAutoCollapseChanged(checked)
         }
 
+        val switchKeepVisible = root.findViewById<MaterialSwitch>(R.id.switchKeepVisible)
+        switchKeepVisible.isChecked = prefs.keepDashboardVisible
+        switchKeepVisible.setOnCheckedChangeListener { _, checked ->
+            prefs.keepDashboardVisible = checked
+            callbacks.onKeepVisibleChanged(checked)
+        }
+
         val spinnerTheme = root.findViewById<Spinner>(R.id.spinnerTheme)
         val themeModes = ThemeMode.entries
         val themeAdapter = ArrayAdapter(
@@ -86,6 +95,32 @@ class SettingsSheet(
                 if (mode == prefs.theme) return
                 callbacks.onThemeSelected(mode)
                 sheet.dismiss()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
+        val spinnerOrientation = root.findViewById<Spinner>(R.id.spinnerOrientation)
+        val orientationModes = OrientationMode.entries
+        val orientationAdapter = ArrayAdapter(
+            context,
+            R.layout.item_spinner,
+            orientationModes.map { context.getString(it.labelRes) }
+        )
+        orientationAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown)
+        spinnerOrientation.adapter = orientationAdapter
+        spinnerOrientation.setSelection(prefs.orientation.ordinal, false)
+        var orientationInitial = true
+        spinnerOrientation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (orientationInitial) {
+                    orientationInitial = false
+                    return
+                }
+                val mode = orientationModes.getOrNull(position) ?: return
+                if (mode == prefs.orientation) return
+                prefs.orientation = mode
+                callbacks.onOrientationChanged(mode)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -115,13 +150,6 @@ class SettingsSheet(
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        }
-
-        val switchHeading = root.findViewById<MaterialSwitch>(R.id.switchCameraHeading)
-        switchHeading.isChecked = prefs.cameraHeadingUp
-        switchHeading.setOnCheckedChangeListener { _, checked ->
-            prefs.cameraHeadingUp = checked
-            callbacks.onCameraHeadingChanged(checked)
         }
 
         val switchExtra = root.findViewById<MaterialSwitch>(R.id.switchExtraStats)
@@ -246,7 +274,7 @@ class SettingsSheet(
         root.findViewById<TextView>(R.id.tvVersion).text =
             context.getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
-        sheet.show()
+        sheet.showExpanded()
     }
 
     fun dismiss() {

@@ -1,4 +1,4 @@
-package com.nika.gpsmap.ui
+﻿package com.nika.gpsmap.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -32,6 +32,9 @@ class PinSheet(
 ) {
 
     interface Callbacks {
+        fun onAddressResolved(label: String)
+        fun onSetStart(label: String)
+        fun onSetDestination(label: String)
         fun onRemovePin()
         fun onClosed()
     }
@@ -42,6 +45,7 @@ class PinSheet(
         get() = dialog?.isShowing == true
     private var scope: CoroutineScope? = null
     private var job: Job? = null
+    private var resolvedAddress: String? = knownAddress
 
     fun show() {
         if (dialog?.isShowing == true) return
@@ -73,8 +77,26 @@ class PinSheet(
                 val resolved = runCatching {
                     NominatimClient.reverse(latitude, longitude)
                 }.getOrNull()
+                resolvedAddress = resolved
                 addressView.text = resolved ?: context.getString(R.string.no_address)
+                callbacks.onAddressResolved(
+                    resolved?.takeIf { it.isNotBlank() }
+                        ?: context.getString(R.string.dropped_pin)
+                )
             }
+        }
+
+        fun pinLabel(): String = resolvedAddress?.takeIf { it.isNotBlank() }
+            ?: context.getString(R.string.dropped_pin)
+
+        root.findViewById<MaterialButton>(R.id.btnSetStart).setOnClickListener {
+            sheet.dismiss()
+            callbacks.onSetStart(pinLabel())
+        }
+
+        root.findViewById<MaterialButton>(R.id.btnSetDestination).setOnClickListener {
+            sheet.dismiss()
+            callbacks.onSetDestination(pinLabel())
         }
 
         val osmUrl = "https://www.openstreetmap.org/?mlat=$latitude&mlon=$longitude" +
@@ -114,7 +136,7 @@ class PinSheet(
             callbacks.onRemovePin()
         }
 
-        sheet.show()
+        sheet.showExpanded()
     }
 
     fun dismiss() {

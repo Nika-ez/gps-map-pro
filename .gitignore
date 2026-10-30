@@ -5,6 +5,7 @@ local.properties
 .DS_Store
 build/
 captures/
+screenshots/
 .externalNativeBuild/
 .cxx/
 *.apk

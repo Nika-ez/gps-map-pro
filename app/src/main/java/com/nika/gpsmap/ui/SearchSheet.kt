@@ -1,4 +1,4 @@
-package com.nika.gpsmap.ui
+﻿package com.nika.gpsmap.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 
 class SearchSheet(
     private val context: Context,
+    private val title: String? = null,
     private val callbacks: Callbacks
 ) {
 
@@ -59,6 +60,9 @@ class SearchSheet(
             scope = null
             callbacks.onClosed()
         }
+
+        root.findViewById<TextView>(R.id.tvSearchTitle).text =
+            title ?: context.getString(R.string.search_place)
 
         val input = root.findViewById<TextInputEditText>(R.id.etSearch)
         val progress = root.findViewById<ProgressBar>(R.id.searchProgress)
@@ -103,7 +107,7 @@ class SearchSheet(
         }
 
         root.findViewById<ImageButton>(R.id.btnCloseSearch).setOnClickListener { sheet.dismiss() }
-        sheet.show()
+        sheet.showExpanded()
     }
 
     fun dismiss() {

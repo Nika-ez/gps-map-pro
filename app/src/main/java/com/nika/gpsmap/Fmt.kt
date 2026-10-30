@@ -81,6 +81,15 @@ object Fmt {
         }
     }
 
+    fun eta(millis: Long): String {
+        if (millis <= 0L) return "—"
+        val totalMinutes = ((millis + 59_999L) / 60_000L).coerceAtLeast(1L)
+        if (totalMinutes < 60L) return "$totalMinutes min"
+        val hours = totalMinutes / 60L
+        val minutes = totalMinutes % 60L
+        return if (minutes == 0L) "$hours h" else "$hours h $minutes min"
+    }
+
     fun coordinates(lat: Double, lon: Double, dms: Boolean): String {
         return if (dms) {
             "${dmsValue(lat, true)} ${dmsValue(lon, false)}"

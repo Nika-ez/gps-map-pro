@@ -26,19 +26,37 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:gravity="end"
         android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/route"
+            android:src="@drawable/ic_route"
+            app:backgroundTint="?attr/appFabColor"
+            app:borderWidth="0dp"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:pressedTranslationZ="0dp"
+            app:rippleColor="#33FFFFFF"
+            app:tint="?attr/appFabIconColor" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/search_place"
             android:src="@drawable/ic_search"
             app:backgroundTint="?attr/appFabColor"
             app:borderWidth="0dp"
-            app:elevation="4dp"
+            app:elevation="0dp"
             app:fabSize="mini"
+            app:pressedTranslationZ="0dp"
             app:rippleColor="#33FFFFFF"
             app:tint="?attr/appFabIconColor" />
 
@@ -51,8 +69,9 @@
             android:src="@drawable/ic_layers"
             app:backgroundTint="?attr/appFabColor"
             app:borderWidth="0dp"
-            app:elevation="4dp"
+            app:elevation="0dp"
             app:fabSize="mini"
+            app:pressedTranslationZ="0dp"
             app:rippleColor="#33FFFFFF"
             app:tint="?attr/appFabIconColor" />
 
@@ -63,6 +82,8 @@
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/camera_mode"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
             android:text="@string/north_up"
             android:textColor="?attr/appFabIconColor"
             app:backgroundTint="?attr/appFabColor"
@@ -78,7 +99,8 @@
             android:src="@drawable/ic_my_location"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="0dp"
-            app:elevation="6dp"
+            app:elevation="0dp"
+            app:pressedTranslationZ="0dp"
             app:rippleColor="#33FFFFFF"
             app:tint="#FFFFFFFF" />
     </LinearLayout>
@@ -117,6 +139,50 @@
         android:text="@string/attribution"
         android:textColor="?attr/hudSubtleColor"
         android:textSize="9sp" />
+
+    <TextView
+        android:id="@+id/routeStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/bg_route_status"
+        android:clickable="true"
+        android:contentDescription="@string/route"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="7dp"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/trackPill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="96dp"
+        android:background="@drawable/bg_track_pill"
+        android:clickable="true"
+        android:contentDescription="@string/hide_track"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="7dp"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        android:visibility="gone" />
 
     <com.nika.gpsmap.ui.HudPanelView
         android:id="@+id/hudPanel"

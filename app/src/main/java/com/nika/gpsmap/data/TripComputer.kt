@@ -24,10 +24,10 @@ class TripComputer {
             lastLon = location.longitude
             return
         }
-        if (location.accuracy > 80f) return
+        if (location.hasAccuracy() && location.accuracy > 40f) return
 
         val speed = if (location.hasSpeed()) location.speed.coerceAtLeast(0f) else 0f
-        if (speed.isFinite() && speed < 90f) {
+        if (speed.isFinite() && speed < 55f) {
             maxSpeedMps = max(maxSpeedMps, speed)
         }
 
@@ -43,7 +43,7 @@ class TripComputer {
         val result = FloatArray(1)
         Location.distanceBetween(lastLat, lastLon, location.latitude, location.longitude, result)
         val meters = result[0].toDouble()
-        if (meters in 1.5..300.0) {
+        if (meters in 1.5..200.0 && meters / (dt / 1000.0) <= 55.0) {
             distanceMeters += meters
             if (speed > 0.5f) movingMillis += dt.coerceAtMost(10_000L)
         }

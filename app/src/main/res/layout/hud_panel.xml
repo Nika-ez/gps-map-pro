@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- The expanded page is pixel-matched to the original 250dp panel. -->
+    <!-- The main/full page keeps the original 250dp panel proportions. -->
     <RelativeLayout
         android:id="@+id/expandedLayout"
         android:layout_width="match_parent"
@@ -96,6 +96,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/altitude" />
                 </LinearLayout>
 
@@ -118,6 +119,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/heading" />
                 </LinearLayout>
 
@@ -140,6 +142,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/fix" />
                 </LinearLayout>
             </LinearLayout>
@@ -169,6 +172,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/distance" />
                 </LinearLayout>
 
@@ -191,6 +195,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/avg_speed" />
                 </LinearLayout>
 
@@ -213,6 +218,7 @@
                         style="@style/TextAppearance.GpsMap.Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="@string/max_speed" />
                 </LinearLayout>
             </LinearLayout>
@@ -239,7 +245,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
             android:maxLines="1"
-            android:text="Sats: 0"
+            android:text="Satellites: 0"
             android:textColor="#0A84FF"
             android:textSize="14sp" />
 
@@ -301,13 +307,12 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- Exactly the original mini bar: 100dp tall, 30dp above the panel bottom. -->
+    <!-- Mini stage: time, speed and battery. -->
     <RelativeLayout
         android:id="@+id/miniLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingHorizontal="24dp">
@@ -317,7 +322,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="18dp"
             android:maxLines="1"
             android:text="--:--"
             android:textColor="#FFFFFF"
@@ -328,7 +334,9 @@
             android:id="@+id/tvSharedKmh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
             android:maxLines="1"
             android:text="km/h: (none)"
             android:textColor="#FFFFFF"
@@ -340,18 +348,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="18dp"
             android:maxLines="1"
             android:text="--%"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <!-- 60x6 bar, exactly where the original handle sat (12dp from the bottom). -->
+    <!-- The bar looks the same, but the touch target is much taller and wider. -->
     <FrameLayout
         android:id="@+id/dragHandleArea"
-        android:layout_width="88dp"
-        android:layout_height="30dp"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/expand_dashboard">
@@ -360,7 +369,7 @@
             android:id="@+id/dragBar"
             android:layout_width="60dp"
             android:layout_height="6dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_drag_handle"
             android:backgroundTint="?attr/hudHandleColor" />

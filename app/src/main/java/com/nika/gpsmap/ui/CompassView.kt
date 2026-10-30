@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.nika.gpsmap.Palette
+import kotlin.math.abs
 import kotlin.math.min
 
 class CompassView @JvmOverloads constructor(
@@ -18,7 +19,12 @@ class CompassView @JvmOverloads constructor(
 
     var azimuth: Float = 0f
         set(value) {
-            field = ((value % 360f) + 360f) % 360f
+            val normalized = ((value % 360f) + 360f) % 360f
+            var difference = normalized - field
+            if (difference > 180f) difference -= 360f
+            if (difference < -180f) difference += 360f
+            if (abs(difference) < 0.15f) return
+            field = normalized
             invalidate()
         }
 

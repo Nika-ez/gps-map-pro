@@ -27,7 +27,7 @@
         <item name="bottomSheetDialogTheme">@style/Theme.GpsMap.BottomSheet</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
 
-        <item name="hudPanelColor">#E6121212</item>
+        <item name="hudPanelColor">#FF121212</item>
         <item name="hudTextColor">#FFFFFF</item>
         <item name="hudSubtleColor">#AAAAAA</item>
         <item name="hudAccentColor">#32D74B</item>

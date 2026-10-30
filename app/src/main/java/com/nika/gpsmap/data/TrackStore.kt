@@ -34,6 +34,8 @@ data class TrackSummary(
 object TrackStore {
 
     private const val TIMESTAMP_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
+    private const val LEGACY_NAME = "GPS Map Pro track"
+    const val MAX_NAME_LENGTH = 60
 
     fun directory(context: Context): File {
         val dir = File(context.filesDir, "tracks")
@@ -55,13 +57,14 @@ object TrackStore {
         val iso = SimpleDateFormat(TIMESTAMP_PATTERN, Locale.US).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
+        val trackName = escapeXml(Fmt.dateTime(startedAt))
         file.bufferedWriter().use { writer ->
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
             writer.write("<gpx version=\"1.1\" creator=\"GPS Map Pro\" xmlns=\"http://www.topografix.com/GPX/1/1\">\n")
-            writer.write("  <metadata><name>GPS Map Pro track</name><time>")
+            writer.write("  <metadata><name>$trackName</name><time>")
             writer.write(iso.format(Date(startedAt)))
             writer.write("Z</time></metadata>\n")
-            writer.write("  <trk><name>GPS Map Pro track</name><trkseg>\n")
+            writer.write("  <trk><name>$trackName</name><trkseg>\n")
             points.forEach { point ->
                 writer.write("    <trkpt lat=\"")
                 writer.write(point.latitude.toString())
@@ -86,7 +89,8 @@ object TrackStore {
 
         return files.mapNotNull { file ->
             runCatching {
-                val points = parse(file)
+                val parsed = parseTrack(file)
+                val points = parsed.points
                 if (points.isEmpty()) return@runCatching null
                 var distance = 0.0
                 val result = FloatArray(1)
@@ -104,7 +108,9 @@ object TrackStore {
                 val duration = (points.last().timeMillis - points.first().timeMillis).coerceAtLeast(0L)
                 TrackSummary(
                     file = file,
-                    name = Fmt.dateTime(started),
+                    name = parsed.name
+                        ?.takeIf { it.isNotBlank() && it != LEGACY_NAME }
+                        ?: Fmt.dateTime(started),
                     startedAt = started,
                     durationMillis = duration,
                     distanceMeters = distance,
@@ -115,6 +121,35 @@ object TrackStore {
     }
 
     fun load(file: File): List<GpxPoint> = parse(file)
+
+    /**
+     * Renames a track in place by rewriting the GPX <name> tags. The file name
+     * stays the same so the displayed/route track references remain valid.
+     */
+    fun rename(file: File, newName: String): Boolean {
+        val cleaned = newName.trim().take(MAX_NAME_LENGTH)
+        if (cleaned.isEmpty()) return false
+        return runCatching {
+            val text = file.readText()
+            val replacement = "<name>${escapeXml(cleaned)}</name>"
+            val updated = if (NAME_TAG.containsMatchIn(text)) {
+                text.replace(NAME_TAG) { replacement }
+            } else {
+                insertName(text, replacement)
+            }
+            val temp = File(file.parentFile, "${file.name}.tmp")
+            temp.writeText(updated)
+            if (parseTrack(temp).points.isEmpty()) {
+                temp.delete()
+                return@runCatching false
+            }
+            if (!temp.renameTo(file)) {
+                file.writeText(updated)
+                temp.delete()
+            }
+            true
+        }.getOrDefault(false)
+    }
 
     fun delete(file: File): Boolean = runCatching { file.delete() }.getOrDefault(false)
 
@@ -132,18 +167,23 @@ object TrackStore {
         }
     }
 
-    private fun parse(file: File): List<GpxPoint> {
-        val text = runCatching { file.readText() }.getOrElse { return emptyList() }
+    private fun parse(file: File): List<GpxPoint> = parseTrack(file).points
+
+    private fun parseTrack(file: File): ParsedTrack {
+        val text = runCatching { file.readText() }.getOrElse {
+            return ParsedTrack(emptyList(), null)
+        }
         return parseXml(text)
     }
 
-    private fun parseXml(text: String): List<GpxPoint> {
+    private fun parseXml(text: String): ParsedTrack {
         val factory = XmlPullParserFactory.newInstance()
         factory.isNamespaceAware = false
         val parser = factory.newPullParser()
         parser.setInput(StringReader(text))
 
         val points = ArrayList<GpxPoint>()
+        var trackName: String? = null
         var lat = Double.NaN
         var lon = Double.NaN
         var altitude = 0.0
@@ -155,6 +195,10 @@ object TrackStore {
             when (event) {
                 XmlPullParser.START_TAG -> {
                     when (parser.name) {
+                        "name" -> if (!insidePoint && trackName == null) {
+                            trackName = parser.nextText().trim()
+                        }
+
                         "trkpt" -> {
                             lat = parser.getAttributeValue(null, "lat")?.toDoubleOrNull() ?: Double.NaN
                             lon = parser.getAttributeValue(null, "lon")?.toDoubleOrNull() ?: Double.NaN
@@ -193,8 +237,39 @@ object TrackStore {
             event = parser.next()
         }
         points.sortBy { it.timeMillis }
-        return points
+        return ParsedTrack(points, trackName)
     }
+
+    private fun insertName(text: String, replacement: String): String {
+        val metadata = METADATA_TAG.find(text)
+        if (metadata != null) {
+            val insertAt = metadata.range.last + 1
+            return text.substring(0, insertAt) + replacement + text.substring(insertAt)
+        }
+        val trk = TRK_TAG.find(text) ?: return text
+        return text.substring(0, trk.range.first) +
+            "<metadata>$replacement</metadata>\n  " +
+            text.substring(trk.range.first)
+    }
+
+    private fun escapeXml(value: String): String = buildString(value.length) {
+        value.forEach { character ->
+            when (character) {
+                '&' -> append("&amp;")
+                '<' -> append("&lt;")
+                '>' -> append("&gt;")
+                '"' -> append("&quot;")
+                '\'' -> append("&apos;")
+                else -> append(character)
+            }
+        }
+    }
+
+    private data class ParsedTrack(val points: List<GpxPoint>, val name: String?)
+
+    private val NAME_TAG = Regex("<name>.*?</name>", RegexOption.DOT_MATCHES_ALL)
+    private val METADATA_TAG = Regex("<metadata(\\s[^>]*)?>")
+    private val TRK_TAG = Regex("<trk(\\s[^>]*)?>")
 
     private fun parseTime(value: String): Long {
         if (value.isEmpty()) return 0L

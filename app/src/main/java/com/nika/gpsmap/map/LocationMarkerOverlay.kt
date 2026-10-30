@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.Point
 import android.graphics.RectF
 import androidx.core.graphics.ColorUtils
 import com.nika.gpsmap.MarkerStyle
@@ -13,8 +14,8 @@ import org.osmdroid.views.overlay.Overlay
 
 class LocationMarkerOverlay : Overlay() {
 
-    private var latitude = 0.0
-    private var longitude = 0.0
+    private val geoPoint = GeoPoint(0.0, 0.0)
+    private val screenPoint = Point()
     private var accuracyMeters = 0f
     private var heading = 0f
     private var hasHeading = false
@@ -53,14 +54,14 @@ class LocationMarkerOverlay : Overlay() {
     private val pinPath = Path()
     private val tailPath = Path()
     private val rect = RectF()
+    private var pinPathDensity = 0f
 
     fun setStyle(style: MarkerStyle) {
         this.style = style
     }
 
     fun update(lat: Double, lon: Double, accuracy: Float, headingDegrees: Float?, hasFix: Boolean) {
-        latitude = lat
-        longitude = lon
+        geoPoint.setCoords(lat, lon)
         accuracyMeters = accuracy
         if (headingDegrees != null && !headingDegrees.isNaN()) {
             heading = headingDegrees
@@ -75,17 +76,15 @@ class LocationMarkerOverlay : Overlay() {
 
     override fun draw(canvas: Canvas, mapView: MapView, shadow: Boolean) {
         if (shadow || !hasFix) return
-        val point = mapView.projection.toPixels(GeoPoint(latitude, longitude), null) ?: return
+        val point = mapView.projection.toPixels(geoPoint, screenPoint) ?: return
         val density = mapView.resources.displayMetrics.density
         val x = point.x.toFloat()
         val y = point.y.toFloat()
 
         if (accuracyMeters > 0f) {
-            runCatching {
-                val radius = mapView.projection.metersToPixels(accuracyMeters)
-                    .coerceIn(10f * density, 420f * density)
-                canvas.drawCircle(x, y, radius, accuracyPaint)
-            }
+            val radius = mapView.projection.metersToPixels(accuracyMeters)
+                .coerceIn(10f * density, 420f * density)
+            canvas.drawCircle(x, y, radius, accuracyPaint)
         }
 
         when (style) {
@@ -157,21 +156,33 @@ class LocationMarkerOverlay : Overlay() {
     }
 
     private fun drawPin(canvas: Canvas, x: Float, y: Float, density: Float) {
+        ensurePinPath(density)
         outlinePaint.strokeWidth = 2.4f * density
-        val centerY = y - 17f * density
-        val radius = 8.2f * density
-        pinPath.reset()
-        pinPath.addCircle(x, centerY, radius, Path.Direction.CW)
-
-        tailPath.reset()
-        tailPath.moveTo(x - radius * 0.78f, centerY + radius * 0.52f)
-        tailPath.lineTo(x, y)
-        tailPath.lineTo(x + radius * 0.78f, centerY + radius * 0.52f)
-        tailPath.close()
-        pinPath.op(tailPath, Path.Op.UNION)
-
+        canvas.save()
+        canvas.translate(x, y)
         canvas.drawPath(pinPath, outlinePaint)
         canvas.drawPath(pinPath, fillPaint)
-        canvas.drawCircle(x, centerY, 2.9f * density, glassPaint)
+        canvas.drawCircle(0f, -17f * density, 2.9f * density, glassPaint)
+        canvas.restore()
+    }
+
+    /**
+     * The pin shape does not depend on the GPS position, so it is built once in
+     * local coordinates and only translated while drawing.
+     */
+    private fun ensurePinPath(density: Float) {
+        if (pinPathDensity == density) return
+        pinPathDensity = density
+        val centerY = -17f * density
+        val radius = 8.2f * density
+        pinPath.reset()
+        pinPath.addCircle(0f, centerY, radius, Path.Direction.CW)
+
+        tailPath.reset()
+        tailPath.moveTo(-radius * 0.78f, centerY + radius * 0.52f)
+        tailPath.lineTo(0f, 0f)
+        tailPath.lineTo(radius * 0.78f, centerY + radius * 0.52f)
+        tailPath.close()
+        pinPath.op(tailPath, Path.Op.UNION)
     }
 }
