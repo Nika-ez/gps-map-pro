@@ -444,8 +444,8 @@ class MainActivity : AppCompatActivity() {
         resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     /**
-     * Fullscreen like the original app: the phone status bar is hidden and can
-     * only be revealed temporarily by swiping from the top edge.
+     * Fullscreen: the phone status bar is hidden and can only be revealed
+     * temporarily by swiping from the top edge.
      */
     private fun enableImmersiveMode() {
         val controller = WindowCompat.getInsetsController(window, window.decorView)

@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- The main/full page keeps the original 250dp panel proportions. -->
+    <!-- The main/full page keeps the 250dp panel proportions. -->
     <RelativeLayout
         android:id="@+id/expandedLayout"
         android:layout_width="match_parent"

@@ -67,7 +67,7 @@
     <string name="reset_settings_message">Theme, units and all other preferences will return to their defaults. Tracks stay on this device.</string>
     <string name="settings_reset">Settings reset</string>
     <string name="cache_calculating">Calculating…</string>
-    <string name="about_credits">A fast, offline-friendly GPS dashboard and map. Remade with care by nika.</string>
+    <string name="about_credits">A fast, offline-friendly GPS dashboard and map, made by nika.</string>
     <string name="about_open_osm">OpenStreetMap copyright</string>
     <string name="location_services_off">Location is disabled — enable GPS to see your position.</string>
     <string name="open_track">Show on map</string>
@@ -140,7 +140,7 @@
     <string name="track_stopped">Recording stopped</string>
     <string name="recording_hint">Recording continues while the app is open. Keep the screen on for best results.</string>
     <string name="tracks_empty">No recordings yet. Open the dashboard and tap Record to start one.</string>
-    <string name="about_body">GPS Map Pro is a fast, offline-friendly map and GPS dashboard.\n\nMap data © OpenStreetMap contributors, available under the Open Database License. Tiles are provided by the selected tile source. Search and reverse geocoding use OpenStreetMap Nominatim.\n\nPrivacy: your location, tracks and settings stay on this device. Search text is sent to Nominatim only when you search; no account or analytics are used.\n\nBuilt as an independent remake of gps_map.</string>
+    <string name="about_body">GPS Map Pro is a fast, offline-friendly map and GPS dashboard.\n\nMap data © OpenStreetMap contributors, available under the Open Database License. Tiles are provided by the selected tile source. Search and reverse geocoding use OpenStreetMap Nominatim.\n\nPrivacy: your location, tracks and settings stay on this device. Search text is sent to Nominatim only when you search; no account or analytics are used.</string>
     <string name="status_lock">GPS LOCK</string>
     <string name="status_searching">SEARCHING</string>
     <string name="status_no_gps">NO GPS</string>

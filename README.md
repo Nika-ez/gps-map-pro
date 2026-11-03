@@ -1,6 +1,6 @@
 # GPS Map Pro
 
-A fast, offline-friendly GPS dashboard for Android. GPS Map Pro keeps the clean dashboard of the original GPS Launcher and adds a live OpenStreetMap, track recording, route planning, search, themes, and a few carefully chosen extras.
+A fast, offline-friendly GPS dashboard for Android. GPS Map Pro combines a clean dashboard with a live OpenStreetMap, track recording, route planning, search, themes, and a few carefully chosen extras.
 
 **made by nika**
 
@@ -24,7 +24,7 @@ A fast, offline-friendly GPS dashboard for Android. GPS Map Pro keeps the clean 
 
 ## Install
 
-Download `GPS-Map-Pro-2.2.apk` from the latest GitHub release and open it on an Android 8.0+ phone. Allow installation from the browser or file manager when prompted, then grant location permission on first launch.
+Download `GPS-Map-Pro-3.0.apk` from the latest GitHub release and open it on an Android 8.0+ phone. Allow installation from the browser or file manager when prompted, then grant location permission on first launch.
 
 The release APK is signed with a stable key, so future versions can be installed over it.
 

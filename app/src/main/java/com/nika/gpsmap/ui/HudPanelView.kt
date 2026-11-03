@@ -620,8 +620,8 @@ class HudPanelView @JvmOverloads constructor(
             }
         }
 
-        // Like the original dashboard, the dark panel stays opaque even in the
-        // hidden stage: only a slim strip with the drag handle is visible.
+        // The dark panel stays opaque even in the hidden stage: only a slim
+        // strip with the drag handle is visible.
         backgroundAlpha = 1f
         (background as? GradientDrawable)?.alpha = (backgroundAlpha * 255f).roundToInt()
 
